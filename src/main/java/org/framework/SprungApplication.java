@@ -18,7 +18,7 @@ public class SprungApplication {
 
     public static void run(Class<?> primaryClass, String[] args) {
         try {
-            instantiateAllAnnotatedClasses();
+            instantiateAllAnnotatedClasses(primaryClass);
             performFieldDI();
 
             // do run() for application
@@ -29,10 +29,11 @@ public class SprungApplication {
         }
     }
 
-    private static void instantiateAllAnnotatedClasses() {
+    private static void instantiateAllAnnotatedClasses(Class<?> primaryClass) {
         try {
 
-            Reflections reflections = new Reflections("org");
+            System.out.println(primaryClass.getPackageName());
+            Reflections reflections = new Reflections(primaryClass.getPackageName());
             for(SprungClassAnnotation annotation: SprungClassAnnotation.values()){
 
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
