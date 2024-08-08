@@ -6,6 +6,7 @@ import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,15 +16,23 @@ public class SprungApplication {
     private static final HashMap<Class< ? extends Annotation>, List<Object>> sprungContext = new HashMap<>();
 
 
-    public static void start(){
-        instantiateAllAnnotatedClasses();
-        performFieldDI();
+    public static void run(Class<?> primaryClass, String[] args) {
+        try {
+            instantiateAllAnnotatedClasses();
+            performFieldDI();
+
+            // do run() for application
+            Runnable primary = (Runnable) primaryClass.getDeclaredConstructor().newInstance();
+            primary.run();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static void instantiateAllAnnotatedClasses() {
         try {
 
-            Reflections reflections = new Reflections("org.framework");
+            Reflections reflections = new Reflections("org");
             for(SprungClassAnnotation annotation: SprungClassAnnotation.values()){
 
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
@@ -56,9 +65,8 @@ public class SprungApplication {
                         // get the type of the field
                         Class<?> theFieldType =field.getType();
                         //get the object instance of this type
-                        Object instance = getBeanOfType(theFieldType, key);
+                        Object instance = getBeanOfType(theFieldType);
                         //do the injection
-                        System.out.println(instance);
                         field.setAccessible(true);
                         field.set(object, instance);
                     }
@@ -70,24 +78,25 @@ public class SprungApplication {
         }
     }
 
-    public static Object getBeanOfType(Class fieldType, Class< ? extends Annotation> key) {
+    public static Object getBeanOfType(Class fieldType) {
         Object bean = null;
         try {
-            for (Object object : sprungContext.get(key)) {
-                Class<?>[] interfaces = object.getClass().getInterfaces();
+            for (List<Object> objectList : sprungContext.values()) {
+                for (Object object : objectList) {
+                    Class<?>[] interfaces = object.getClass().getInterfaces();
 
-                // search for interfaces
-                for (Class<?> theInterface : interfaces) {
-                    System.out.println(theInterface.getName().contentEquals(fieldType.getName()));
-                    if (theInterface.getName().contentEquals(fieldType.getName())) {
-                        bean = object;
+                    // search for interfaces
+                    for (Class<?> theInterface : interfaces) {
+                        if (theInterface.getName().contentEquals(fieldType.getName())) {
+                            bean = object;
+                        }
                     }
-                }
 
-                // use class in no interfaces
-                if(bean == null){
-                    if (object.getClass().getName().contentEquals(fieldType.getName())) {
-                        bean = object;
+                    // use class in no interfaces
+                    if (bean == null) {
+                        if (object.getClass().getName().contentEquals(fieldType.getName())) {
+                            bean = object;
+                        }
                     }
                 }
             }
