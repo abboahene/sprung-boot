@@ -2,9 +2,9 @@ package org.test.partA;
 
 import org.framework.SprungApplication;
 import org.framework.annotations.Autowired;
-import org.framework.annotations.Service;
+import org.framework.annotations.SprungBootApplication;
 
-@Service
+@SprungBootApplication
 public class Main implements Runnable{
 
     @Autowired
