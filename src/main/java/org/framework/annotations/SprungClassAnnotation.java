@@ -4,7 +4,8 @@ import java.lang.annotation.Annotation;
 
 public enum SprungClassAnnotation {
     SERVICE(Service.class),
-    SPRING_BOOT_APPLICATION(SprungBootApplication.class);
+    SPRING_BOOT_APPLICATION(SprungBootApplication.class),
+    CORE_CLASS(Component.class);
 
     private final Class<? extends Annotation> annotationClass;
 
