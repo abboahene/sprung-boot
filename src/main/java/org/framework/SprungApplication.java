@@ -1,13 +1,15 @@
 package org.framework;
 
 import org.framework.annotations.Autowired;
+import org.framework.annotations.EnableAsync;
+import org.framework.annotations.Scheduled;
 import org.framework.annotations.SprungClassAnnotation;
 import org.framework.pubSub.ApplicationEventPublisher;
+import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,7 @@ public class SprungApplication {
             // do run() for application
             Runnable primary = (Runnable) primaryClassInstance;
             primary.run();
+            startAllScheduledMethods();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -58,6 +61,10 @@ public class SprungApplication {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private static void startAllScheduledMethods(){
+       new Schedule(sprungContext.values().stream().toList());
     }
 
     private static void instantiateApplicationEventPublisher(){
