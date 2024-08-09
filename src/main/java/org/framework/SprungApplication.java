@@ -1,38 +1,47 @@
 package org.framework;
 
 import org.framework.annotations.Autowired;
+import org.framework.annotations.EnableAsync;
+import org.framework.annotations.Scheduled;
 import org.framework.annotations.SprungClassAnnotation;
+import org.framework.pubSub.ApplicationEventPublisher;
+import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 public class SprungApplication {
-    private static final HashMap<Class< ? extends Annotation>, List<Object>> sprungContext = new HashMap<>();
+    private static final HashMap<Class<?>, List<Object>> sprungContext = new HashMap<>();
 
 
     public static void run(Class<?> primaryClass, String[] args) {
         try {
-            instantiateAllAnnotatedClasses();
-            performFieldDI();
+            instantiateAllAnnotatedClasses(primaryClass);
+            instantiateApplicationEventPublisher();
+
+            Object primaryClassInstance =  primaryClass.getDeclaredConstructor().newInstance();
+            performFieldDI(primaryClassInstance);
 
             // do run() for application
-            Runnable primary = (Runnable) primaryClass.getDeclaredConstructor().newInstance();
+            Runnable primary = (Runnable) primaryClassInstance;
             primary.run();
+            startAllScheduledMethods();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    private static void instantiateAllAnnotatedClasses() {
+    private static void instantiateAllAnnotatedClasses(Class<?> primaryClass) {
         try {
 
-            Reflections reflections = new Reflections("org");
+            System.out.println(primaryClass.getPackageName());
+            Reflections reflections = new Reflections(primaryClass.getPackageName(), SprungApplication.class.getPackageName());
+
             for(SprungClassAnnotation annotation: SprungClassAnnotation.values()){
 
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
@@ -54,27 +63,44 @@ public class SprungApplication {
         }
     }
 
-    private static void performFieldDI() {
+    private static void startAllScheduledMethods(){
+       new Schedule(sprungContext.values().stream().toList());
+    }
+
+    private static void instantiateApplicationEventPublisher(){
+        ApplicationEventPublisher publisher = new ApplicationEventPublisher(sprungContext.values().stream().toList());
+        if (sprungContext.containsKey(ApplicationEventPublisher.class)) {
+            sprungContext.get(ApplicationEventPublisher.class).add(publisher);
+        } else {
+            List<Object> list = new ArrayList<>();
+            list.add(publisher);
+            sprungContext.put(ApplicationEventPublisher.class, list);
+        }
+    }
+
+    private static void performFieldDI(Object primaryInstance) {
         try {
-            for (Class< ? extends Annotation> key : sprungContext.keySet()) {
+            injectFields(primaryInstance);
+
+            for (Class<?> key : sprungContext.keySet()) {
                 List<Object> objects = sprungContext.get(key);
-            for (Object object : objects) {
-                // find annotated fields
-                for (Field field : object.getClass().getDeclaredFields()) {
-                    if (field.isAnnotationPresent(Autowired.class)) {
-                        // get the type of the field
-                        Class<?> theFieldType =field.getType();
-                        //get the object instance of this type
-                        Object instance = getBeanOfType(theFieldType);
-                        //do the injection
-                        field.setAccessible(true);
-                        field.set(object, instance);
-                    }
+                for (Object object : objects) {
+                    injectFields(object);
                 }
-            }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void injectFields(Object instance) throws IllegalAccessException {
+        for (Field field : instance.getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(Autowired.class)) {
+                Class<?> fieldType = field.getType();
+                Object bean = getBeanOfType(fieldType);
+                field.setAccessible(true);
+                field.set(instance, bean);
+            }
         }
     }
 
@@ -105,4 +131,5 @@ public class SprungApplication {
         }
         return bean;
     }
+
 }

@@ -1,4 +1,4 @@
-package org.test.partA;
+package org.test.partD;
 
 import org.framework.SprungApplication;
 import org.framework.annotations.Autowired;

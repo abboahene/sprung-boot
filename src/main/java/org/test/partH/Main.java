@@ -1,4 +1,4 @@
-package org.test.partA;
+package org.test.partH;
 
 import org.framework.SprungApplication;
 import org.framework.annotations.Autowired;
@@ -9,12 +9,14 @@ public class Main implements Runnable{
 
     @Autowired
     private ICustomerService customerService;
+
     public static void main(String[] args) {
         SprungApplication.run(Main.class, args);
     }
 
     @Override
     public void run() {
-        customerService.addCustomer();
+        Customer customer = new Customer("John Doe", "392892");
+        customerService.addCustomer(customer);
     }
 }
