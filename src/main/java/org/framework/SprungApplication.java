@@ -1,28 +1,33 @@
 package org.framework;
 
-import org.framework.annotations.Autowired;
-import org.framework.annotations.EnableAsync;
-import org.framework.annotations.Scheduled;
-import org.framework.annotations.SprungClassAnnotation;
+import org.framework.annotations.*;
+import org.framework.async.AsyncProxy;
+import org.framework.configProperties.ConfigPropertiesProcessor;
 import org.framework.pubSub.ApplicationEventPublisher;
 import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class SprungApplication {
+public class SprungApplication{
     private static final HashMap<Class<?>, List<Object>> sprungContext = new HashMap<>();
+
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();;
 
     public static void run(Class<?> primaryClass, String[] args) {
         try {
+            processConfiguration(primaryClass);
+
             instantiateAllAnnotatedClasses(primaryClass);
             instantiateApplicationEventPublisher();
 
@@ -63,7 +68,7 @@ public class SprungApplication {
                 }
             }
 
-            System.out.println(sprungContext);
+//            System.out.println(sprungContext);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -71,6 +76,15 @@ public class SprungApplication {
 
     private static void startAllScheduledMethods(){
        new Schedule(sprungContext.values().stream().toList());
+    }
+    private static void processConfiguration(Class<?> primaryClass){
+        if (primaryClass.isAnnotationPresent(EnableConfigurationProperties.class)) {
+            ConfigPropertiesProcessor configPropertiesProcessor = new ConfigPropertiesProcessor();
+            Object object = configPropertiesProcessor.process(primaryClass);
+            List<Object> list = new ArrayList<>();
+            list.add(object);
+            sprungContext.put(ConfigurationProperties.class, list);
+        }
     }
 
     private static void instantiateApplicationEventPublisher(){
@@ -148,14 +162,38 @@ public class SprungApplication {
         }
     }
 
-    private static void injectFields(Object instance) throws IllegalAccessException {
-        for (Field field : instance.getClass().getDeclaredFields()) {
-            if (field.isAnnotationPresent(Autowired.class)) {
-                Class<?> fieldType = field.getType();
-                Object bean = getBeanOfType(fieldType);
-                field.setAccessible(true);
-                field.set(instance, bean);
+    private static void injectFields(Object object) throws IllegalAccessException {
+        try {
+            for (Field field : object.getClass().getDeclaredFields()) {
+                if (field.isAnnotationPresent(Autowired.class)) {
+                    Class<?> fieldType = field.getType();
+                    Object fieldTypeBean = getBeanOfType(fieldType);
+                    field.setAccessible(true);
+                    //check if we should use proxy
+                    injectProxyIfNeeded(object,field, fieldTypeBean);
+
+                    System.out.println("Proxy needed");
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void injectProxyIfNeeded(Object object,Field field, Object fieldTypeBean) {
+        try {
+            if (fieldTypeBean.getClass().isAnnotationPresent(EnableAsync.class)) {
+                Object asyncBean = Proxy.newProxyInstance(
+                        fieldTypeBean.getClass().getClassLoader(),
+                        fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
+                        new AsyncProxy(fieldTypeBean, executorService)
+                );
+                field.set(object, asyncBean);
+            } else {
+                field.set(object, fieldTypeBean);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
     private static void performSetterDI() {
@@ -179,7 +217,7 @@ public class SprungApplication {
         }
     }
 
-    public static Object getBeanOfType(Class fieldType) {
+    public static Object getBeanOfType(Class<?> fieldType) {
         Object bean = null;
         try {
             for (List<Object> objectList : sprungContext.values()) {
@@ -207,5 +245,4 @@ public class SprungApplication {
         }
         return bean;
     }
-
 }
