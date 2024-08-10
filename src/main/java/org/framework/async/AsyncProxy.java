@@ -5,7 +5,6 @@ import org.framework.annotations.Async;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AsyncProxy implements InvocationHandler {
 
@@ -13,15 +12,14 @@ public class AsyncProxy implements InvocationHandler {
     private final ExecutorService executorService;
 
 
-    public AsyncProxy(Object target) {
+    public AsyncProxy(Object target, ExecutorService executorService) {
         this.target = target;
-        this.executorService = Executors.newCachedThreadPool();
+        this.executorService = executorService;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.isAnnotationPresent(Async.class)) {
             // Run asynchronously
-            System.out.println("asynceee");
             executorService.submit(() -> {
                 try {
                     method.invoke(target, args);
