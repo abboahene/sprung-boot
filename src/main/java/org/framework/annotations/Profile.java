@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD,ElementType.TYPE})
-public @interface Qualifier {
+@Target(ElementType.TYPE)
+public @interface Profile {
     public String name() default "";
 }

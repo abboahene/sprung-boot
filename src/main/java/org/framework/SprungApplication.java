@@ -1,16 +1,19 @@
 package org.framework;
 
-import org.framework.annotations.Autowired;
-import org.framework.annotations.EnableAsync;
-import org.framework.annotations.Scheduled;
-import org.framework.annotations.SprungClassAnnotation;
+import org.framework.annotations.*;
 import org.framework.pubSub.ApplicationEventPublisher;
 import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
 
+import javax.swing.plaf.synth.SynthUI;
+import java.awt.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +23,24 @@ import java.util.*;
 
 public class SprungApplication {
     private static final HashMap<Class<?>, List<Object>> sprungContext = new HashMap<>();
+    private static Properties properties = new Properties();
 
+    // Add this method to get the active profile
+    private static String getActiveProfile() {
+        return properties.getProperty("active.profile");
+    }
     public static void run(Class<?> primaryClass, String[] args) {
         try {
+            // Load properties from application.properties
+            loadProperties();
+
             instantiateAllAnnotatedClasses(primaryClass);
             instantiateApplicationEventPublisher();
 
-            Object primaryClassInstance =  primaryClass.getDeclaredConstructor().newInstance();
+
+            Object primaryClassInstance = createInstanceWithConstructorDI(primaryClass);
             // Call the constructor injection method first
-            performConstructorDI();
-            performFieldDI(primaryClassInstance);
-            performSetterDI();
+            performDI(primaryClassInstance);
 
             // do run() for application
             Runnable primary = (Runnable) primaryClassInstance;
@@ -46,11 +56,23 @@ public class SprungApplication {
 
             System.out.println(primaryClass.getPackageName());
             Reflections reflections = new Reflections(primaryClass.getPackageName(), SprungApplication.class.getPackageName());
-
+            String activeProfile = getActiveProfile();
             for(SprungClassAnnotation annotation: SprungClassAnnotation.values()){
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
                 for (Class<?> annotatedClass : annotatedClasses) {
-//                    Object object = (Object) annotatedClass.getDeclaredConstructor().newInstance();
+
+                    // Check if the class has a Profile annotation
+                    if (annotatedClass.isAnnotationPresent(Profile.class)) {
+                        Profile profileAnnotation = annotatedClass.getAnnotation(Profile.class);
+                        String profileName = profileAnnotation.name();
+
+                        // If the active profile does not match, skip this class
+                        if (!profileName.equals(activeProfile)) {
+                            continue;
+                        }
+                    }
+
+                    //Object object = (Object) annotatedClass.getDeclaredConstructor().newInstance();
                     Object object = createInstanceWithConstructorDI(annotatedClass);
                     if(sprungContext.containsKey(annotation.value())){
                         sprungContext.get(annotation.value()).add(object);
@@ -59,7 +81,6 @@ public class SprungApplication {
                         list.add(object);
                         sprungContext.put(annotation.value(), list);
                     }
-                    // Adding instances to the context
                 }
             }
 
@@ -84,62 +105,17 @@ public class SprungApplication {
         }
     }
 
-    // Helper method to create an instance considering constructor DI
-    private static Object createInstanceWithConstructorDI(Class<?> clazz) {
+    private static void performDI(Object primaryInstance) {
         try {
-            Constructor<?> autowiredConstructor = findConstructorWithAutowired(clazz);
-            if (autowiredConstructor != null) {
-                Class<?>[] parameterTypes = autowiredConstructor.getParameterTypes();
-                Object[] parameters = Arrays.stream(parameterTypes)
-                        .map(SprungApplication::getBeanOfType)
-                        .toArray();
-                autowiredConstructor.setAccessible(true);
-                return autowiredConstructor.newInstance(parameters);
-            } else {
-                // Use the default constructor if no @Autowired constructor is found
-                return clazz.getDeclaredConstructor().newInstance();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to instantiate class: " + clazz.getName(), e);
-        }
-    }
-
-    private static Constructor<?> findConstructorWithAutowired(Class<?> clazz) {
-        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-            if (constructor.isAnnotationPresent(Autowired.class)) {
-                return constructor;
-            }
-        }
-        return null;
-    }
-
-    private static void performConstructorDI() {
-        try {
-            for (List<Object> objects : sprungContext.values()) {
-                for (Object object : objects) {
-                    Constructor<?> constructor = findConstructorWithAutowired(object.getClass());
-                    if (constructor != null) {
-                        Class<?>[] parameterTypes = constructor.getParameterTypes();
-                        Object[] parameters = Arrays.stream(parameterTypes)
-                                .map(SprungApplication::getBeanOfType)
-                                .toArray();
-                        constructor.setAccessible(true);
-                        constructor.newInstance(parameters);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void performFieldDI(Object primaryInstance) {
-        try {
+            injectConstructors(primaryInstance);
+            injectSetters(primaryInstance);
             injectFields(primaryInstance);
 
             for (Class<?> key : sprungContext.keySet()) {
                 List<Object> objects = sprungContext.get(key);
                 for (Object object : objects) {
+                    injectConstructors(object);
+                    injectSetters(object);
                     injectFields(object);
                 }
             }
@@ -150,35 +126,52 @@ public class SprungApplication {
 
     private static void injectFields(Object instance) throws IllegalAccessException {
         for (Field field : instance.getClass().getDeclaredFields()) {
+//            if (field.isAnnotationPresent(Autowired.class) || field.isAnnotationPresent(Qualifier.class)) {
+//                Class<?> fieldType = field.getType();
+//                Object bean = getBeanOfType(fieldType);
+//                field.setAccessible(true);
+//                field.set(instance, bean);
+//
             if (field.isAnnotationPresent(Autowired.class)) {
-                Class<?> fieldType = field.getType();
-                Object bean = getBeanOfType(fieldType);
-                field.setAccessible(true);
-                field.set(instance, bean);
-            }
-        }
-    }
-    private static void performSetterDI() {
-        try {
-            for (List<Object> objects : sprungContext.values()) {
-                for (Object object : objects) {
-                    for (Method method : object.getClass().getDeclaredMethods()) {
-                        if (method.isAnnotationPresent(Autowired.class) && method.getName().startsWith("set") && method.getParameterCount() == 1)
-                        {
-                            Object parameter = getBeanOfType(method.getParameterTypes()[0]);
-                            if (parameter != null) {
-                                method.setAccessible(true);
-                                method.invoke(object, parameter);
-                            }
-                        }
-                    }
+                Object bean = null;
+
+                if (field.isAnnotationPresent(Qualifier.class)) {
+                    // Handle Qualifier annotation
+                    Qualifier qualifier = field.getAnnotation(Qualifier.class);
+                    bean = getBeanWithQualifier(field.getType(), qualifier.name());
+                } else {
+                    // Regular Autowired injection
+                    bean = getBeanOfType(field.getType());
+                }
+
+                if (bean != null) {
+                    field.setAccessible(true);
+                    field.set(instance, bean);
+                } else {
+                    System.out.println("No bean found for field: " + field.getName());
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            if (field.isAnnotationPresent(Value.class)) {
+                Value valueAnnotation = field.getAnnotation(Value.class);
+                String propertyValue = properties.getProperty(valueAnnotation.value());
+                field.setAccessible(true);
+                field.set(instance, convertToFieldType(propertyValue, field.getType()));
+            }
         }
     }
 
+    private static Object convertToFieldType(String value, Class<?> fieldType) {
+        if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
+            return Integer.parseInt(value);
+        } else if (fieldType.equals(double.class) || fieldType.equals(Double.class)) {
+            return Double.parseDouble(value);
+        } else if (fieldType.equals(boolean.class) || fieldType.equals(Boolean.class)) {
+            return Boolean.parseBoolean(value);
+        }
+        // Add more conversions as needed
+        return value;
+    }
     public static Object getBeanOfType(Class fieldType) {
         Object bean = null;
         try {
@@ -190,6 +183,7 @@ public class SprungApplication {
                     for (Class<?> theInterface : interfaces) {
                         if (theInterface.getName().contentEquals(fieldType.getName())) {
                             bean = object;
+                            return bean;
                         }
                     }
 
@@ -206,6 +200,105 @@ public class SprungApplication {
             e.printStackTrace();
         }
         return bean;
+    }
+
+    private static Object getBeanWithQualifier(Class<?> fieldType, String qualifierName) {
+        try {
+            for (List<Object> objectList : sprungContext.values()) {
+                for (Object object : objectList) {
+                    if (fieldType.isInstance(object)) {
+                        // Check if the class-level @Qualifier annotation matches
+                        Qualifier qualifier = object.getClass().getAnnotation(Qualifier.class);
+                        if (qualifier != null && qualifier.name().equals(qualifierName)) {
+                            return object;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static void injectConstructors(Object instance) {
+        for (Constructor<?> constructor : instance.getClass().getDeclaredConstructors()) {
+
+            if (constructor.isAnnotationPresent(Autowired.class)) {
+                try {
+                    Parameter[] parameters = constructor.getParameters();
+                    Object[] params = new Object[parameters.length];
+                    for (int i = 0; i < parameters.length; i++) {
+                        Object o = getBeanOfType(parameters[i].getType());
+                        params[i] = o;
+                    }
+                    constructor.setAccessible(true);
+                    constructor.newInstance(params);
+                    Object newInstance = constructor.newInstance(params);
+
+                    // Replace the old instance with the new instance
+                    instance = newInstance;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void injectSetters(Object instance) {
+        for (Method method : instance.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Autowired.class) && method.getParameterCount() == 1) {
+                try {
+                    Class<?> paramType = method.getParameterTypes()[0];
+                    Object param = getBeanOfType(paramType);
+
+                    method.setAccessible(true);
+                    method.invoke(instance, param);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static Object createInstanceWithConstructorDI(Class<?> annotatedClass) {
+        for (Constructor<?> constructor : annotatedClass.getDeclaredConstructors()) {
+            if (constructor.isAnnotationPresent(Autowired.class)) {
+                try {
+                    Class<?>[] paramTypes = constructor.getParameterTypes();
+                    Object[] params = new Object[paramTypes.length];
+
+                    for (int i = 0; i < paramTypes.length; i++) {
+                        params[i] = getBeanOfType(paramTypes[i]);
+                    }
+
+                    constructor.setAccessible(true);
+                    return constructor.newInstance(params);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // If no constructor is annotated with @Autowired, try the default constructor
+        try {
+            return annotatedClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void loadProperties() {
+        try (InputStream input = SprungApplication.class.getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find application.properties");
+                return;
+            }
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
