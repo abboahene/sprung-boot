@@ -162,15 +162,16 @@ public class SprungApplication{
                     // Regular Autowired injection
                     Class<?> fieldType = field.getType();
                     bean = getBeanOfType(fieldType);
-                    field.setAccessible(true);
-                    //check if we should use proxy
-                    injectProxyIfNeeded(instance, field, bean);
+//                    field.setAccessible(true);
+//                    //check if we should use proxy
+//                    injectProxyIfNeeded(instance, field, bean);
                     System.out.println("Proxy needed");
                 }
 
                 if (bean != null) {
-                    field.setAccessible(true);
-                    field.set(instance, bean);
+//                    field.setAccessible(true);
+//                    field.set(instance, bean);
+                    injectProxyIfNeeded(instance, field, bean);
                 } else {
                     System.out.println("No bean found for field: " + field.getName());
                 }
@@ -193,8 +194,10 @@ public class SprungApplication{
                         fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
                         new AsyncProxy(fieldTypeBean, executorService)
                 );
+                field.setAccessible(true);
                 field.set(object, asyncBean);
             } else {
+                field.setAccessible(true);
                 field.set(object, fieldTypeBean);
             }
         }catch (Exception e){
