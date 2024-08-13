@@ -1,0 +1,44 @@
+
+x
+java:S1066è"/Merge this if statement with the enclosing one.(¿’î¸ùÿÿÿÿ8ÛéÿÈ”2J$bcd154bb-468e-482d-9bac-7a3dd23322b9
+
+java:S22599"EA "NullPointerException" could be thrown; "primary" is nullable here.(©ƒ¥Èúÿÿÿÿ8áéÿÈ”2J$7fd04652-765c-4b76-be93-f81f9338cd5a
+s
+java:S3740×"/Provide the parametrized type for this generic.(¶–½ı8äéÿÈ”2J$48867d3c-8152-4769-a93a-9fe335f1c5a6
+}
+java:S1118":Add a private constructor to hide the implicit public one.(ÉñÚà8æéÿÈ”2J$7fbb90cb-9df7-4de2-8943-e951878ba865
+n
+java:S1172("+Remove this unused method parameter "args".(ë±½›8îéÿÈ”2J$2a8492eb-2481-4bda-b77d-bb532c98b077
+r	java:S106C"+Replace this use of System.out by a logger.(ÆÁÂêúÿÿÿÿ8ğéÿÈ”2J$050bd21b-ab27-4a62-a03b-ac306464d187
+~	java:S125U"<This block of commented-out lines of code should be removed.(¤‘Ì„8óéÿÈ”2J$9993a756-302d-4619-af7f-9e4124d9b3b7
+ƒ	java:S125a"<This block of commented-out lines of code should be removed.(‘®úúşÿÿÿÿ8ôéÿÈ”2J$23c6d4c8-7362-461e-95ea-0d7e6d71526b
+x
+java:S2864…"4Iterate over the "entrySet" instead of the "keySet".(©İÅœ8÷éÿÈ”2J$ea72a08f-9547-4ed5-9b92-6b8ddafaca5e
+„	java:S125”"<This block of commented-out lines of code should be removed.(Áø¼®ùÿÿÿÿ8øéÿÈ”2J$a4d24077-626e-4eb1-b2fb-c20766cdf28b
+p
+java:S3011¥",This accessibility update should be removed.(˜ÂÓ˜8ùéÿÈ”2J$ddc0349b-b4ff-4226-a055-e0780438d677
+n	java:S106¨"+Replace this use of System.out by a logger.(×¨ô8ùéÿÈ”2J$634d35ca-d88b-4b8c-8b1c-79fb0a8a3d61
+p
+java:S3011¬",This accessibility update should be removed.(˜ÂÓ˜8ùéÿÈ”2J$014aeb2d-57af-4ce0-8c56-bb8700227fe0
+p
+java:S3011­",This accessibility bypass should be removed.(¾øÖø8ùéÿÈ”2J$cdae365d-2a41-42e5-899d-5bb4848ff81c
+n	java:S106¯"+Replace this use of System.out by a logger.(º¯Ğ¸8ùéÿÈ”2J$872b15e8-2daa-44cc-a8b6-464fd085a151
+p
+java:S3011¶",This accessibility update should be removed.(˜ÂÓ˜8úéÿÈ”2J$90fec7e0-249f-495d-8717-294a60df3aa2
+p
+java:S3011·",This accessibility bypass should be removed.(¥Şè8úéÿÈ”2J$92d52324-980f-4656-b05e-bb7113869d66
+u
+java:S3011Ä",This accessibility bypass should be removed.(ÈŠ»õùÿÿÿÿ8üéÿÈ”2J$2a05e09f-9984-422d-a0bb-52981fa66738
+p
+java:S3011Æ",This accessibility bypass should be removed.(¹¥â¼8üéÿÈ”2J$4e82ed79-cfeb-4ffe-bc59-f4ba68d826be
+–
+java:S3776×"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¶–½ı8ıéÿÈ”2J$742419c7-2224-48d6-b5c4-3ac5e47b9f8d
+…
+java:S1854˜"<Remove this useless assignment to local variable "instance".(¼À€¦ûÿÿÿÿ8ÿéÿÈ”2J$0970fd72-5c92-40bc-83f2-1d10df35f2ff
+p
+java:S3011“",This accessibility update should be removed.(”İÙ®8ÿéÿÈ”2J$027a0732-4a3a-41a3-ac54-aff70f36ba21
+p
+java:S3011§",This accessibility update should be removed.(Ó«§¯8€êÿÈ”2J$c6a87ad1-7f78-4363-bfd3-200bdd42dc0a
+p
+java:S3011»",This accessibility update should be removed.(”İÙ®8êÿÈ”2J$39ea060b-45ee-41b9-8821-7d0675325190
+s	java:S106Ï"+Replace this use of System.out by a logger.(¦ë›Úÿÿÿÿÿ8êÿÈ”2J$869c3590-583c-43c7-8ec0-5fa0285711a9

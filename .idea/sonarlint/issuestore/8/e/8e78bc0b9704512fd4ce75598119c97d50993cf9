@@ -1,0 +1,14 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‰‹
+c
+java:S2095"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(‰Úùï
+Z
+java:S2147"DCombine this catch with the one at line 21, which has the same body.(ï­£Ä
+B
+java:S3011*",This accessibility update should be removed.(˜ÂÓ˜
+B
+java:S3011-",This accessibility bypass should be removed.(øĞ’¬
+B
+java:S30110",This accessibility bypass should be removed.(Ğ”¬À
+B
+java:S30112",This accessibility bypass should be removed.(è›å•
