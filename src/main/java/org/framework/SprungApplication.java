@@ -1,6 +1,8 @@
 package org.framework;
 
 import org.framework.annotations.*;
+import org.framework.async.AsyncProxy;
+import org.framework.configProperties.ConfigPropertiesProcessor;
 import org.framework.pubSub.ApplicationEventPublisher;
 import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
@@ -14,16 +16,22 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class SprungApplication {
+public class SprungApplication{
     private static final HashMap<Class<?>, List<Object>> sprungContext = new HashMap<>();
     private static Properties properties = new Properties();
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     // Add this method to get the active profile
     private static String getActiveProfile() {
@@ -33,6 +41,8 @@ public class SprungApplication {
         try {
             // Load properties from application.properties
             loadProperties();
+
+            processConfiguration(primaryClass);
 
             instantiateAllAnnotatedClasses(primaryClass);
             instantiateApplicationEventPublisher();
@@ -84,7 +94,7 @@ public class SprungApplication {
                 }
             }
 
-            System.out.println(sprungContext);
+//            System.out.println(sprungContext);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -92,6 +102,15 @@ public class SprungApplication {
 
     private static void startAllScheduledMethods(){
        new Schedule(sprungContext.values().stream().toList());
+    }
+    private static void processConfiguration(Class<?> primaryClass){
+        if (primaryClass.isAnnotationPresent(EnableConfigurationProperties.class)) {
+            ConfigPropertiesProcessor configPropertiesProcessor = new ConfigPropertiesProcessor();
+            Object object = configPropertiesProcessor.process(primaryClass);
+            List<Object> list = new ArrayList<>();
+            list.add(object);
+            sprungContext.put(ConfigurationProperties.class, list);
+        }
     }
 
     private static void instantiateApplicationEventPublisher(){
@@ -141,7 +160,12 @@ public class SprungApplication {
                     bean = getBeanWithQualifier(field.getType(), qualifier.name());
                 } else {
                     // Regular Autowired injection
-                    bean = getBeanOfType(field.getType());
+                    Class<?> fieldType = field.getType();
+                    bean = getBeanOfType(fieldType);
+                    field.setAccessible(true);
+                    //check if we should use proxy
+                    injectProxyIfNeeded(instance, field, bean);
+                    System.out.println("Proxy needed");
                 }
 
                 if (bean != null) {
@@ -161,6 +185,22 @@ public class SprungApplication {
         }
     }
 
+    private static void injectProxyIfNeeded(Object object,Field field, Object fieldTypeBean) {
+        try {
+            if (fieldTypeBean.getClass().isAnnotationPresent(EnableAsync.class)) {
+                Object asyncBean = Proxy.newProxyInstance(
+                        fieldTypeBean.getClass().getClassLoader(),
+                        fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
+                        new AsyncProxy(fieldTypeBean, executorService)
+                );
+                field.set(object, asyncBean);
+            } else {
+                field.set(object, fieldTypeBean);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     private static Object convertToFieldType(String value, Class<?> fieldType) {
         if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
             return Integer.parseInt(value);
@@ -300,5 +340,4 @@ public class SprungApplication {
             e.printStackTrace();
         }
     }
-
 }
