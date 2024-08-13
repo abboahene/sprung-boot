@@ -19,6 +19,7 @@ public class AsyncProxy implements InvocationHandler {
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.isAnnotationPresent(Async.class)) {
+            System.out.println("Async invoke");
             // Run asynchronously
             executorService.submit(() -> {
                 try {

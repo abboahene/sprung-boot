@@ -1,15 +1,15 @@
 
-•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(˜ªáØJ$dc7fccb3-8527-4185-86c4-56cea0fe707b
-m	java:S106"+Replace this use of System.out by a logger.(Î„š8”ü¸É“2J$c9353eb0-ef43-4fc2-bf65-68cc17bdad57
-m	java:S106"+Replace this use of System.out by a logger.(¹ä‚î8Ú£üÂ”2J$f5a0b52b-ab03-4e36-8a67-5947e1547192
-]
-java:S1128"@Remove this unused import 'org.framework.annotations.Autowired'.(ÊÇ†¼8±ƒ«É”2
-]
-java:S1128"@Remove this unused import 'org.framework.annotations.Qualifier'.(ÿÜŸ®8±ƒ«É”2
-Z
-java:S1128"8Remove this unused import 'org.test.partB.EmailService'.(œ‰Îâúÿÿÿÿ8±ƒ«É”2
-X
-java:S1128	";Remove this unused import 'org.test.partB.IAccountService'.(ïµÆ¡8±ƒ«É”2
-U
+•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(˜ªáØJ$8ad75a7c-abc2-405e-8500-3846fc75b025
+m	java:S106"+Replace this use of System.out by a logger.(Î„š8”ü¸É“2J$8a9ba972-b868-4e0e-b8c4-8ef5e120b2d4
+m	java:S106"+Replace this use of System.out by a logger.(¹ä‚î8Ú£üÂ”2J$89127cbb-d695-456e-9267-716cab84d209
+ƒ
+java:S1128"@Remove this unused import 'org.framework.annotations.Autowired'.(ÊÇ†¼8±ƒ«É”2J$aadf9643-88db-4bb4-ba7f-72800137e84d
+ƒ
+java:S1128"@Remove this unused import 'org.framework.annotations.Qualifier'.(ÿÜŸ®8±ƒ«É”2J$e127514d-0e82-4b49-8fd9-a78ed8ce86c0
+€
+java:S1128"8Remove this unused import 'org.test.partB.EmailService'.(œ‰Îâúÿÿÿÿ8±ƒ«É”2J$f66badc7-4b34-404c-bbf7-cd7f7b4aea15
+~
+java:S1128	";Remove this unused import 'org.test.partB.IAccountService'.(ïµÆ¡8±ƒ«É”2J$8d72e820-cd6e-4427-8e5d-df7ae4b14e03
+{
 java:S1128
-"9Remove this unused import 'org.test.partB.TestQualifier'.(‰ıİ#8±ƒ«É”2
+"9Remove this unused import 'org.test.partB.TestQualifier'.(‰ıİ#8±ƒ«É”2J$83cdd401-7b25-43f7-a394-fc1f5f3927d4
