@@ -1,54 +1,52 @@
 
 x
-java:S1066å"/Merge this if statement with the enclosing one.(¿’î¸ùÿÿÿÿ8¯¶Àõ”2J$12c22a82-d4df-41bd-a0c9-d960eb6264a2
+java:S1066ğ"/Merge this if statement with the enclosing one.(¿’î¸ùÿÿÿÿ8¯¶Àõ”2J$d7b1df13-6056-4e45-b235-a6b0e2c51329
 ©
-java:S1488º"`Immediately return this expression instead of assigning it to the temporary variable "instance".(¡‡÷ùÿÿÿÿ8ù‘®‹•2J$c553c352-b3ee-4ed0-a183-5e238e606798
+java:S1488Å"`Immediately return this expression instead of assigning it to the temporary variable "instance".(¡‡÷ùÿÿÿÿ8ù‘®‹•2J$48f87604-c1d4-40b5-8f8d-759178c602b3
 ¤
-java:S1488Å"`Immediately return this expression instead of assigning it to the temporary variable "instance".(õÃ÷µ8÷µ®‹•2J$582d1b49-9ac8-4345-97c6-16c71f86f154
+java:S1488Ğ"`Immediately return this expression instead of assigning it to the temporary variable "instance".(õÃ÷µ8÷µ®‹•2J$fdac42f3-886e-43ff-b9bd-601b6139fd55
+~
+java:S1141Â"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8¢ù®Œ•2J$d55a3c6f-7c0a-4733-a36d-859224ae80d4
 
-java:S22599"EA "NullPointerException" could be thrown; "primary" is nullable here.(©ƒ¥Èúÿÿÿÿ8±¶Àõ”2J$e98478ca-673b-4743-a87e-7857b73e6e95
+java:S22594"EA "NullPointerException" could be thrown; "primary" is nullable here.(©ƒ¥Èúÿÿÿÿ8£ù®Œ•2J$70ed80a7-0af4-4bb6-8ad8-610a43d898e7
 s
-java:S3740Ô"/Provide the parametrized type for this generic.(¶–½ı8³¶Àõ”2J$3285e543-bfbc-4085-80e5-39240d7cb99f
+java:S3740ß"/Provide the parametrized type for this generic.(¶–½ı8³¶Àõ”2J$2dd28404-999c-45e2-837e-d044240110b4
 }
-java:S1118":Add a private constructor to hide the implicit public one.(ÉñÚà8µ¶Àõ”2J$6b17c1e7-ec25-482b-b166-93b239913fd6
+java:S1118":Add a private constructor to hide the implicit public one.(ÉñÚà8­ù®Œ•2J$5fa22748-98a2-41ea-b237-f0695881fc23
 n
-java:S1172("+Remove this unused method parameter "args".(ë±½›8¸¶Àõ”2J$d9da8ab6-ecae-4b81-a0f7-271185696806
-r	java:S106C"+Replace this use of System.out by a logger.(ÆÁÂêúÿÿÿÿ8¹¶Àõ”2J$18653b63-f41b-420f-8e7b-885fee40d540
-~	java:S125F"<This block of commented-out lines of code should be removed.( ùÙî8»™¼ö”2J$bf808efb-1e06-4ce1-80c9-54938aa83f56
-~	java:S125W"<This block of commented-out lines of code should be removed.(¤‘Ì„8¬§¨‹•2J$209cdf68-cf2d-488e-89da-017eaf4dce2a
-ƒ	java:S125f"<This block of commented-out lines of code should be removed.(‘®úúşÿÿÿÿ8ˆÍª‹•2J$10921c4c-5989-4b03-a739-4e22ac415433
+java:S1172#"+Remove this unused method parameter "args".(ë±½›8°ù®Œ•2J$e8f895a0-b784-4c6d-9d15-c47733727d76
+r	java:S106>"+Replace this use of System.out by a logger.(ÆÁÂêúÿÿÿÿ8™¶®‹•2J$81e4ce11-26a2-453f-823e-f283318fb352
+~	java:S125A"<This block of commented-out lines of code should be removed.( ùÙî8µù®Œ•2J$9ace1121-e67e-419f-a0e1-851931993437
+~	java:S125R"<This block of commented-out lines of code should be removed.(¤‘Ì„8µù®Œ•2J$54164f89-a0ed-4afe-a204-00be576ae9cb
+ƒ	java:S125a"<This block of commented-out lines of code should be removed.(‘®úúşÿÿÿÿ8¶ù®Œ•2J$2849a94d-ce23-4ccf-b4d0-f15705bc1a79
 x
-java:S2864Š"4Iterate over the "entrySet" instead of the "keySet".(©İÅœ8À¶Àõ”2J$2c41a772-d73f-4c9a-b68b-ea67a1d8ee50
-n	java:S106¤"+Replace this use of System.out by a logger.(×¨ô8ÜîÄõ”2J$88c48dc6-4fcf-47c3-8252-35d54e626c12
-n	java:S106ª"+Replace this use of System.out by a logger.(º¯Ğ¸8Ø¨ƒö”2J$58dd40e1-700d-4e7c-9100-ff4e718e5458
+java:S2864…"4Iterate over the "entrySet" instead of the "keySet".(©İÅœ8¹ù®Œ•2J$441f3d23-a5d8-4403-a560-c71e0d7d7bf6
+n	java:S106¤"+Replace this use of System.out by a logger.(º¯Ğ¸8»ù®Œ•2J$463e1b51-7fb2-4104-bd15-950b811c0e36
 p
-java:S3011±",This accessibility update should be removed.(˜ÂÓ˜8Â¶Àõ”2J$5f5bdcf5-22fe-4e00-8530-6b6d98e4a54c
+java:S3011«",This accessibility update should be removed.(˜ÂÓ˜8»ù®Œ•2J$b44d34b0-c65e-4ecb-9628-384701ccfd09
 p
-java:S3011²",This accessibility bypass should be removed.(¥Şè8Â¶Àõ”2J$03f2f323-251d-4688-992c-6321dc016710
+java:S3011¬",This accessibility bypass should be removed.(¥Şè8»ù®Œ•2J$6584c292-08a8-48f8-bfb1-723b543a1fad
 p
-java:S3011¿",This accessibility update should be removed.(˜ÂÓ˜8Ã¶Àõ”2J$5440f6ee-1f57-4a50-9a8e-804d1cf2d35b
+java:S3011¿",This accessibility update should be removed.(˜ÂÓ˜8¾ù®Œ•2J$09b2e235-6664-4d7a-8462-5f1aabca1c2a
 u
-java:S3011À",This accessibility bypass should be removed.(ÈŠ»õùÿÿÿÿ8Ã¶Àõ”2J$1cdb9f8f-8273-4965-b1d9-7fc62c3e8ad8
+java:S3011À",This accessibility bypass should be removed.(Ç¸îÉùÿÿÿÿ8Àù®Œ•2J$c9c8ec0d-166a-4b8f-8fca-76d4d40fa10b
 p
-java:S3011Â",This accessibility update should be removed.(˜ÂÓ˜8Ã¶Àõ”2J$be733bb4-f58b-4f8c-a9ec-7cd535a8bde2
+java:S3011È",This accessibility update should be removed.(˜ÂÓ˜8Àù®Œ•2J$25962db2-a815-411d-9b83-3e4dea7d145e
+u
+java:S3011É",This accessibility bypass should be removed.(Ç¸îÉùÿÿÿÿ8Àù®Œ•2J$5ef30ea2-9f0b-463c-8a99-43149c78a69f
 p
-java:S3011Ã",This accessibility bypass should be removed.(¹¥â¼8Ã¶Àõ”2J$97bc8a06-408c-4935-9a42-aecf4d692b80
+java:S3011Ë",This accessibility update should be removed.(˜ÂÓ˜8Áù®Œ•2J$9c21bcd4-11d4-4753-999e-be4a875e8fce
+p
+java:S3011Ì",This accessibility bypass should be removed.(¹¥â¼8Áù®Œ•2J$9b8f1f94-cc4c-40e1-85b7-c3b449ab8f56
 –
-java:S3776Ô"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¶–½ı8Ä¶Àõ”2J$b4986a4f-b0d4-499e-a744-dfb9aea1a955
+java:S3776ß"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(¶–½ı8Ä¶Àõ”2J$4f2a5000-6a80-4a4b-a9e4-a7de9ffff9d0
 …
-java:S1854•"<Remove this useless assignment to local variable "instance".(¼À€¦ûÿÿÿÿ8Å¶Àõ”2J$8f1e4ada-11e4-408c-bf5e-fd63e0a3f27c
+java:S1854 "<Remove this useless assignment to local variable "instance".(¼À€¦ûÿÿÿÿ8Å¶Àõ”2J$e4fb3958-dbe3-4841-9bc3-5258f191b476
 p
-java:S3011",This accessibility update should be removed.(”İÙ®8Å¶Àõ”2J$2e99eaed-ec9e-4c1c-a540-99a47c977e59
+java:S3011›",This accessibility update should be removed.(”İÙ®8Å¶Àõ”2J$725e5002-b2f8-46ad-985e-dc7e67cb1b3a
 p
-java:S3011¤",This accessibility update should be removed.(Ó«§¯8Æ¶Àõ”2J$02ec2201-c51d-4155-bb9f-591290c4dc96
+java:S3011¯",This accessibility update should be removed.(Ó«§¯8Æ¶Àõ”2J$af1804b3-e2e9-4228-8e57-650714e8cd6d
 p
-java:S3011¹",This accessibility update should be removed.(”İÙ®8ƒ¤®‹•2J$cac79242-2437-4c1e-a8b8-64e3ac5fb962
-	java:S125Ä"<This block of commented-out lines of code should be removed.(Ûëÿó8™¶®‹•2J$c1e1b55b-c4e3-4b1c-90d2-da81c9828bea
-s	java:S106Ğ"+Replace this use of System.out by a logger.(¦ë›Úÿÿÿÿÿ8™¶®‹•2J$fa86b3de-a185-452c-ac93-94d6f67fda19
-ƒ
-java:S1128
-";Remove this unused import 'javax.swing.plaf.synth.SynthUI'.(Å‘ïÕûÿÿÿÿ8Ä™¼ö”2J$734323e4-c58e-4ecb-925a-71c3c33a9bb9
-h
-java:S1128"%Remove this unused import 'java.awt'.(ï´µ©8Ä™¼ö”2J$bec19451-39df-4cce-b9d9-d268a129222e
-w
-java:S1128"4Remove this unused import 'java.io.FileInputStream'.(˜³ÉÓ8Ä™¼ö”2J$2732766d-709a-4e22-b826-11ac94bd2296
+java:S3011Ä",This accessibility update should be removed.(”İÙ®8ƒ¤®‹•2J$2846b902-1e5c-4176-980c-baa31f662203
+	java:S125Ï"<This block of commented-out lines of code should be removed.(Ûëÿó8™¶®‹•2J$0fe8e6e5-65dd-4f7a-b42c-73de8807105a
+s	java:S106Û"+Replace this use of System.out by a logger.(¦ë›Úÿÿÿÿÿ8Ëù®Œ•2J$f4cc1d41-2f1b-4203-b7b4-5f6b63e1b03f

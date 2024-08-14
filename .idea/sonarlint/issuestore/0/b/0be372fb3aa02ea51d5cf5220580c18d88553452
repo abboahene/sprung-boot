@@ -1,7 +1,7 @@
 
-΅	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ότηϋÿÿÿÿ8€ΌΖ“2J$d0030b11-68b3-4b8b-9dc7-b90119af7a50
-m	java:S106#"+Replace this use of System.out by a logger.(Ρι“8ϋªΘΖ“2J$461a196e-5016-4c8e-9098-5c61aeff5702
+΅	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ότηϋÿÿÿÿ8€ΌΖ“2J$f8850d11-1a1c-4c85-996e-ebcb8ec603d5
+m	java:S106#"+Replace this use of System.out by a logger.(Ρι“8ϋªΘΖ“2J$86dc9cd7-d717-4d08-9e35-9d1074c2f950
 …
-java:S1128"=Remove this unused import 'org.framework.annotations.Inject'.(ξ¤ΟΏύÿÿÿÿ8σ¬ªΙ”2J$0b5cceb7-638c-4f5d-b227-8d9b9f76109c
+java:S1128"=Remove this unused import 'org.framework.annotations.Inject'.(ξ¤ΟΏύÿÿÿÿ8σ¬ªΙ”2J$44ee6a95-7ade-42c2-a538-dd4b109c78c9
 „
-java:S1128"<Remove this unused import 'org.test.partA.ICustomerService'.(Γ΄¶›ψÿÿÿÿ8σ¬ªΙ”2J$0ce9a85e-9477-4c62-ac2a-5368ac2a4a53
+java:S1128"<Remove this unused import 'org.test.partA.ICustomerService'.(Γ΄¶›ψÿÿÿÿ8σ¬ªΙ”2J$6fb4c16e-7ac6-4b9a-9de0-9b7d76213217
