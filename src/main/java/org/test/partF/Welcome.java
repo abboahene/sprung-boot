@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class Welcome {
     @Scheduled(fixedRate = 1000)
     public void runSchedule(){
-        System.out.println("This task runs every 1 seconds.." + LocalDateTime.now());
+        System.out.println("This task runs every 1 second.." + LocalDateTime.now());
     }
 
 }
