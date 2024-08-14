@@ -67,9 +67,45 @@ public class SprungApplication{
             System.out.println(primaryClass.getPackageName());
             Reflections reflections = new Reflections(primaryClass.getPackageName(), SprungApplication.class.getPackageName());
             String activeProfile = getActiveProfile();
+//            AspectHandler aspectHandler = new AspectHandler();
             for(SprungClassAnnotation annotation: SprungClassAnnotation.values()){
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
                 for (Class<?> annotatedClass : annotatedClasses) {
+
+//                    System.out.println("Aspect Class " + annotatedClass);
+//                    String targetClass = "";
+//                    // Register advice methods
+//                    for (Method method : annotatedClass.getDeclaredMethods()) {
+//                        if (method.isAnnotationPresent(Before.class)) {
+//                            Before before = method.getAnnotation(Before.class);
+//                            String[] temp = before.pointcut().split("\\.");
+//                            String tempClass = "";
+//                            for(int i=0;i<temp.length-1;i++){
+//                               if(i==0){
+//                                   tempClass = temp[i];
+//                               }else{
+//                                   tempClass = tempClass + "."+temp[i];
+//                               }
+//                            }
+//                            if(tempClass!="")
+//                            targetClass = tempClass;
+//                            aspectHandler.registerBeforeAdvice(before.pointcut(), method);
+//                        } else if (method.isAnnotationPresent(After.class)) {
+//                            After after = method.getAnnotation(After.class);
+//                            String[] temp = after.pointcut().split("\\.");
+//                            String tempClass = "";
+//                            for(int i=0;i<temp.length-1;i++){
+//                                if(i==0){
+//                                    tempClass = temp[i];
+//                                }else{
+//                                    tempClass = tempClass + "."+temp[i];
+//                                }
+//                            }
+//                            if(!Objects.equals(tempClass, ""))
+//                            targetClass = tempClass;
+//                            aspectHandler.registerAfterAdvice(after.pointcut(), method);
+//                        }
+//                    }
 
                     // Check if the class has a Profile annotation
                     if (annotatedClass.isAnnotationPresent(Profile.class)) {
@@ -83,7 +119,16 @@ public class SprungApplication{
                     }
 
                     //Object object = (Object) annotatedClass.getDeclaredConstructor().newInstance();
+                    // Instantiate and apply aspect if needed
+
                     Object object = createInstanceWithConstructorDI(annotatedClass);
+//                    if (annotatedClass.isAnnotationPresent(Aspect.class)) {
+//                        Class<?> clazz = Class.forName(targetClass);
+//                        Object aspectObj = createInstanceWithConstructorDI(clazz);
+//                        System.out.println("TargetObj: " + aspectObj);
+//                        object = aspectHandler.createProxy(aspectObj);
+//                    }
+
                     if(sprungContext.containsKey(annotation.value())){
                         sprungContext.get(annotation.value()).add(object);
                     }else{
@@ -315,8 +360,12 @@ public class SprungApplication{
                         params[i] = getBeanOfType(paramTypes[i]);
                     }
 
+//                    constructor.setAccessible(true);
+//                    return constructor.newInstance(params);
                     constructor.setAccessible(true);
-                    return constructor.newInstance(params);
+                    Object instance = constructor.newInstance(params);
+
+                    return instance;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -325,7 +374,9 @@ public class SprungApplication{
 
         // If no constructor is annotated with @Autowired, try the default constructor
         try {
-            return annotatedClass.getDeclaredConstructor().newInstance();
+//            return annotatedClass.getDeclaredConstructor().newInstance();
+            Object instance = annotatedClass.getDeclaredConstructor().newInstance();
+            return instance;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
