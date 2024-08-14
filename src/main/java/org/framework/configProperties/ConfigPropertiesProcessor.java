@@ -17,7 +17,7 @@ public class ConfigPropertiesProcessor {
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         try {
             // load the properties file
-            properties.load(new FileInputStream(rootPath + "/config.properties"));
+            properties.load(new FileInputStream(rootPath + "/application.properties"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
