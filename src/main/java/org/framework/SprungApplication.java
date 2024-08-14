@@ -156,7 +156,6 @@ public class SprungApplication{
                     // Regular Autowired injection
                     Class<?> fieldType = field.getType();
                     bean = getBeanOfType(fieldType);
-                    System.out.println("Proxy needed");
                 }
 
                 if (bean != null) {

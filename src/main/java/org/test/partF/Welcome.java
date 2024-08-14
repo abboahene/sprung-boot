@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 
 @Service
 public class Welcome {
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000)
     public void runSchedule(){
-        System.out.println("This task runs every 5 seconds.." + LocalDateTime.now());
+        System.out.println("This task runs every 1 seconds.." + LocalDateTime.now());
     }
 
 }
