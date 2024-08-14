@@ -8,7 +8,7 @@ import org.framework.annotations.SprungBootApplication;
 public class Main implements Runnable{
 
     @Autowired
-    static ICustomerService customerService;
+    private ICustomerService customerService;
     public static void main(String[] args) {
         SprungApplication.run(Main.class, args);
     }

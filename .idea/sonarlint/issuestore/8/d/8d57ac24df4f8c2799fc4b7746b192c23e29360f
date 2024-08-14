@@ -1,0 +1,11 @@
+
+¡	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(üŒôçûÿÿÿÿ8¬ÕƒÈ“2J$207c11cb-1c9c-4f00-8346-3185a8503101
+r	java:S106"+Replace this use of System.out by a logger.(ÛÀ–Åÿÿÿÿÿ8ìí±È“2J$2ae6182b-8c11-4c9a-acc4-620d7d8283b6
+]
+java:S1128"@Remove this unused import 'org.framework.annotations.Autowired'.(ÊÇ†¼8‰ù÷ä”2
+_
+java:S1128"=Remove this unused import 'org.framework.annotations.Inject'.(î¤Ï¿ýÿÿÿÿ8‰ù÷ä”2
+]
+java:S1128"@Remove this unused import 'org.framework.annotations.Qualifier'.(ÿÜŸ®8‰ù÷ä”2
+X
+java:S1128";Remove this unused import 'org.test.partA.CustomerService'.(÷½ã«8‰ù÷ä”2
