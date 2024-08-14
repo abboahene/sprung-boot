@@ -1,5 +1,5 @@
 
-œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÊÝìÝ8ºœ¹Ã”2J$b568e6e4-0358-47d1-ba26-00141dfbc2d5
-m	java:S106"+Replace this use of System.out by a logger.(ðÐÇ½8Åœ¹Ã”2J$6216e224-c458-4c7b-962f-1dd255c41983
+œ	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÊÝìÝ8ºœ¹Ã”2J$905a3a74-a1f2-4455-9d15-09e41e8df64e
+m	java:S106"+Replace this use of System.out by a logger.(ðÐÇ½8Åœ¹Ã”2J$c705c966-75b0-4152-afc7-f90dc52624f5
 „
-java:S1128"<Remove this unused import 'org.framework.annotations.Value'.(¢ôÞçüÿÿÿÿ8Åœ¹Ã”2J$39c35399-4a80-4269-9e05-43de709ba180
+java:S1128"<Remove this unused import 'org.framework.annotations.Value'.(¢ôÞçüÿÿÿÿ8Åœ¹Ã”2J$03c237d2-d366-4ed8-aa9b-1fc71bbb8b10
