@@ -1,23 +1,18 @@
 package org.framework;
 
 import org.framework.annotations.*;
+import org.framework.aop.AspectProxy;
 import org.framework.async.AsyncProxy;
 import org.framework.configProperties.ConfigPropertiesProcessor;
 import org.framework.pubSub.ApplicationEventPublisher;
 import org.framework.schedule.Schedule;
 import org.reflections.Reflections;
 
-import javax.swing.plaf.synth.SynthUI;
-import java.awt.*;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,17 +177,34 @@ public class SprungApplication{
 
     private static void injectProxyIfNeeded(Object object,Field field, Object fieldTypeBean) {
         try {
+
             if (fieldTypeBean.getClass().isAnnotationPresent(EnableAsync.class)) {
                 Object asyncBean = Proxy.newProxyInstance(
                         fieldTypeBean.getClass().getClassLoader(),
                         fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
                         new AsyncProxy(fieldTypeBean, executorService)
                 );
+                Object aspectBean = Proxy.newProxyInstance(
+                        fieldTypeBean.getClass().getClassLoader(),
+                        fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
+                        new AspectProxy(asyncBean, sprungContext.get(Aspect.class))
+                );
                 field.setAccessible(true);
-                field.set(object, asyncBean);
+                field.set(object, aspectBean);
             } else {
-                field.setAccessible(true);
-                field.set(object, fieldTypeBean);
+                try {
+                    Object aspectBean = Proxy.newProxyInstance(
+                            fieldTypeBean.getClass().getClassLoader(),
+                            fieldTypeBean.getClass().getInterfaces().length > 0 ? fieldTypeBean.getClass().getInterfaces() : new Class<?>[]{fieldTypeBean.getClass()},
+                            new AspectProxy(fieldTypeBean, sprungContext.get(Aspect.class))
+                    );
+                    field.setAccessible(true);
+                    field.set(object, aspectBean);
+                }catch (Exception e){
+                    field.setAccessible(true);
+                    field.set(object, fieldTypeBean);
+                }
+
             }
         }catch (Exception e){
             e.printStackTrace();
