@@ -72,40 +72,6 @@ public class SprungApplication{
                 Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(annotation.value());
                 for (Class<?> annotatedClass : annotatedClasses) {
 
-//                    System.out.println("Aspect Class " + annotatedClass);
-//                    String targetClass = "";
-//                    // Register advice methods
-//                    for (Method method : annotatedClass.getDeclaredMethods()) {
-//                        if (method.isAnnotationPresent(Before.class)) {
-//                            Before before = method.getAnnotation(Before.class);
-//                            String[] temp = before.pointcut().split("\\.");
-//                            String tempClass = "";
-//                            for(int i=0;i<temp.length-1;i++){
-//                               if(i==0){
-//                                   tempClass = temp[i];
-//                               }else{
-//                                   tempClass = tempClass + "."+temp[i];
-//                               }
-//                            }
-//                            if(tempClass!="")
-//                            targetClass = tempClass;
-//                            aspectHandler.registerBeforeAdvice(before.pointcut(), method);
-//                        } else if (method.isAnnotationPresent(After.class)) {
-//                            After after = method.getAnnotation(After.class);
-//                            String[] temp = after.pointcut().split("\\.");
-//                            String tempClass = "";
-//                            for(int i=0;i<temp.length-1;i++){
-//                                if(i==0){
-//                                    tempClass = temp[i];
-//                                }else{
-//                                    tempClass = tempClass + "."+temp[i];
-//                                }
-//                            }
-//                            if(!Objects.equals(tempClass, ""))
-//                            targetClass = tempClass;
-//                            aspectHandler.registerAfterAdvice(after.pointcut(), method);
-//                        }
-//                    }
 
                     // Check if the class has a Profile annotation
                     if (annotatedClass.isAnnotationPresent(Profile.class)) {
@@ -122,12 +88,6 @@ public class SprungApplication{
                     // Instantiate and apply aspect if needed
 
                     Object object = createInstanceWithConstructorDI(annotatedClass);
-//                    if (annotatedClass.isAnnotationPresent(Aspect.class)) {
-//                        Class<?> clazz = Class.forName(targetClass);
-//                        Object aspectObj = createInstanceWithConstructorDI(clazz);
-//                        System.out.println("TargetObj: " + aspectObj);
-//                        object = aspectHandler.createProxy(aspectObj);
-//                    }
 
                     if(sprungContext.containsKey(annotation.value())){
                         sprungContext.get(annotation.value()).add(object);
@@ -190,12 +150,6 @@ public class SprungApplication{
 
     private static void injectFields(Object instance) throws IllegalAccessException {
         for (Field field : instance.getClass().getDeclaredFields()) {
-//            if (field.isAnnotationPresent(Autowired.class) || field.isAnnotationPresent(Qualifier.class)) {
-//                Class<?> fieldType = field.getType();
-//                Object bean = getBeanOfType(fieldType);
-//                field.setAccessible(true);
-//                field.set(instance, bean);
-//
             if (field.isAnnotationPresent(Autowired.class)) {
                 Object bean = null;
 
@@ -207,15 +161,10 @@ public class SprungApplication{
                     // Regular Autowired injection
                     Class<?> fieldType = field.getType();
                     bean = getBeanOfType(fieldType);
-//                    field.setAccessible(true);
-//                    //check if we should use proxy
-//                    injectProxyIfNeeded(instance, field, bean);
                     System.out.println("Proxy needed");
                 }
 
                 if (bean != null) {
-//                    field.setAccessible(true);
-//                    field.set(instance, bean);
                     injectProxyIfNeeded(instance, field, bean);
                 } else {
                     System.out.println("No bean found for field: " + field.getName());
@@ -360,11 +309,9 @@ public class SprungApplication{
                         params[i] = getBeanOfType(paramTypes[i]);
                     }
 
-//                    constructor.setAccessible(true);
-//                    return constructor.newInstance(params);
+
                     constructor.setAccessible(true);
                     Object instance = constructor.newInstance(params);
-
                     return instance;
                 } catch (Exception e) {
                     e.printStackTrace();
